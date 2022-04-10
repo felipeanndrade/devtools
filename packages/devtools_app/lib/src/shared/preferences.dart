@@ -14,10 +14,12 @@ class PreferencesController {
   final ValueNotifier<bool> _darkModeTheme = ValueNotifier(true);
   final ValueNotifier<bool> _vmDeveloperMode = ValueNotifier(false);
   final ValueNotifier<bool> _denseMode = ValueNotifier(false);
+  final ValueNotifier<bool> _viMode = ValueNotifier(false);
 
   ValueListenable<bool> get darkModeTheme => _darkModeTheme;
   ValueListenable<bool> get vmDeveloperModeEnabled => _vmDeveloperMode;
   ValueListenable<bool> get denseModeEnabled => _denseMode;
+  ValueListenable<bool> get viModeEnabled => _viMode;
 
   Future<void> init() async {
     // Get the current values and listen for and write back changes.
@@ -39,6 +41,12 @@ class PreferencesController {
       storage.setValue('ui.denseMode', '${_denseMode.value}');
     });
 
+    value = await storage.getValue('ui.viMode');
+    toggleVIMode(value == 'true');
+    _viMode.addListener((){
+      storage.setValue('ui.viMode', '${_viMode.value}');
+    });
+
     setGlobal(PreferencesController, this);
   }
 
@@ -56,5 +64,10 @@ class PreferencesController {
   /// Change the value for the dense mode setting.
   void toggleDenseMode(bool enableDenseMode) {
     _denseMode.value = enableDenseMode;
+  }
+
+  /// CHange the value for the VI mode setting.
+  void toggleVIMode(bool enableVIMode){
+    _viMode.value = enableVIMode;
   }
 }
